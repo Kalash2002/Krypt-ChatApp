@@ -1,7 +1,6 @@
-// deploying and initialiazing blockchains first node wee need to do this in Constants.js
-//this file from artifact/contract/ChatApp.json(or we can say contracts json ) is now tranfered to context file
-import chatAppJSON from "./ChatApp.json";
-//address of 0th block :  0x0E71261245A3399F11fB49f8aa94D22d0c29B21D
+//0x5FbDB2315678afecb367f032d93F642f64180aa3
+import chatApp from "./ChatApp.json";
 
-export const ChatAppAddress = " 0x0E71261245A3399F11fB49f8aa94D22d0c29B21D";
-export const ChatAppABI = chatAppJSON.abi;
+export const ChatAppAddress = "0x9Ff3F7f13a5b9d4F4fAa4770a64789DA2196a5A8";
+
+export const ChatAppABI = chatApp.abi;

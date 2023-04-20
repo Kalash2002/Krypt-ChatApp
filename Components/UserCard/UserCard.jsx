@@ -1,38 +1,36 @@
 import React from "react";
 import Image from "next/image";
-//Internal imports
-import image from "../../Assets";
-import Styles from "./UserCard.module.css";
+
+//INTERNAL IMPORT
+import Style from "./UserCard.module.css";
+import images from "../../Assets";
 const UserCard = ({ el, i, addFriends }) => {
-  console.log("in usercard");
-  //using below clg we get all users
   console.log(el);
-  //console.log(el.name)
   return (
-    <div className={Styles.UserCard}>
-      <div className={Styles.UserCard_box}>
+    <div className={Style.UserCard}>
+      <div className={Style.UserCard_box}>
         <Image
-          className={Styles.UserCard_box_img}
-          src={image.images}
+          className={Style.UserCard_box_img}
+          src={images[`image${i + 1}`]}
           alt="user"
           width={100}
           height={100}
         />
 
-        <div className={Styles.UserCard_box_info}>
+        <div className={Style.UserCard_box_info}>
           <h3>{el.name}</h3>
-          <p>{el.accountAddress.slice(0, 25)}</p>
+          <p>{el.accountAddress.slice(0, 25)}..</p>
           <button
-            onClick={() => {
-              console.log(el.name, el.accountAddress);
-              addFriends(el.name, el.accountAddress);
-            }}
+            onClick={() =>
+              addFriends({ name: el.name, accountAddress: el.accountAddress })
+            }
           >
             Add Friend
           </button>
         </div>
       </div>
-      <small className={Styles.number}>{i + 1}</small>
+
+      <small className={Style.number}>{i + 1}</small>
     </div>
   );
 };

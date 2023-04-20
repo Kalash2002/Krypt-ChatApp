@@ -2,110 +2,104 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-//Internal imports
-import Styles from "./Chat.module.css";
-import images from "../../../Assets";
-import { convertTime } from "../../../Utils/apiFeature";
+//INTERNAL IMPORT
+import Style from "./Chat.module.css";
+import images from "../../../assets";
+import { converTime } from "../../../Utils/apiFeature";
 import { Loader } from "../../index";
 
 const Chat = ({
   functionName,
   readMessage,
-  friendmsg,
+  friendMsg,
   account,
   userName,
   loading,
   currentUserName,
   currentUserAddress,
-  //readUser
+  readUser,
 }) => {
-  console.log("in chat");
+  //USTE STATE
   const [message, setMessage] = useState("");
   const [chatData, setChatData] = useState({
     name: "",
     address: "",
   });
 
-  console.log("Get friendMessage", friendmsg);
-
   const router = useRouter();
 
   useEffect(() => {
     if (!router.isReady) return;
-    // console.log("router query",router.query);
     setChatData(router.query);
-
-    readMessage(router.query.address);
-    //readUser(router.query.address);
   }, [router.isReady]);
 
+  useEffect(() => {
+    if (chatData.address) {
+      readMessage(chatData.address);
+      readUser(chatData.address);
+    }
+  }, []);
 
-
-
-  //console.log("after useEffect");
-  //console.log(chatData);
-  //console.log("CuurentUser", currentUserName);
-  //console.log("CurrentAddress", currentUserAddress);
-
-
+  // console.log(chatData.address, chatData.name);
   return (
-    <div className={Styles.Chat}>
+    <div className={Style.Chat}>
       {currentUserName && currentUserAddress ? (
-        <div className={Styles.Chat_user_info}>
-          <Image src={images.username} alt="image" width={70} height={70} />
-          <div className={Styles.Chat_user_info_box}>
-            <h4>{chatData.name}</h4>
-            <p className={Styles.show}>{chatData.address}</p>
+        <div className={Style.Chat_user_info}>
+          <Image src={images.accountName} alt="image" width={70} height={70} />
+          <div className={Style.Chat_user_info_box}>
+            <h4>{currentUserName}</h4>
+            <p className={Style.show}>{currentUserAddress}</p>
           </div>
         </div>
       ) : (
-        "hey"
+        ""
       )}
 
-      <div className={Styles.Chat_box_box}>
-        <div className={Styles.Chat_box}>
-          <div className={Styles.Chat_box_left}>
-
-            {friendmsg.map((el, i) => (
+      <div className={Style.Chat_box_box}>
+        <div className={Style.Chat_box}>
+          <div className={Style.Chat_box_left}>
+            {friendMsg.map((el, i) => (
               <div>
                 {el.sender == chatData.address ? (
-                  <div className={Styles.Chat_box_left_title}>
+                  <div className={Style.Chat_box_left_title}>
                     <Image
-                      src={images.account}
+                      src={images.accountName}
                       alt="image"
                       width={50}
                       height={50}
                     />
-
                     <span>
                       {chatData.name} {""}
-                      <small>Time : {convertTime(el.timestamp)}</small>
+                      <small>Time: {converTime(el.timestamp)}</small>
                     </span>
                   </div>
                 ) : (
-                  <div className={Styles.Chat_box_left_title}>
+                  <div className={Style.Chat_box_left_title}>
                     <Image
-                      src={images.account}
+                      src={images.accountName}
                       alt="image"
                       width={50}
                       height={50}
                     />
-
                     <span>
                       {userName} {""}
-                      <small>Time : {convertTime(el.timestamp)}</small>
+                      <small>Time: {converTime(el.timestamp)}</small>
                     </span>
                   </div>
                 )}
-                <p key={i+1}>{el.msg}{""}{""}</p>
+                <p key={i + 1}>
+                  {el.msg}
+                  {""}
+                  {""}
+                </p>
               </div>
             ))}
           </div>
         </div>
 
-        {currentUserAddress && currentUserAddress ? (
-          <div className={Styles.Chat_box_send}>
-            <div className={Styles.Chat_box_send_img}>
+        {currentUserName && currentUserAddress ? (
+          <div className={Style.Chat_box_send}>
+            <div className={Style.Chat_box_send_img}>
               <Image src={images.smile} alt="smile" width={50} height={50} />
               <input
                 type="text"
@@ -118,18 +112,18 @@ const Chat = ({
               ) : (
                 <Image
                   src={images.send}
-                  alt="send"
+                  alt="file"
                   width={50}
-                  height
-                  onClick={() =>{console.log(message)
+                  height={50}
+                  onClick={() =>
                     functionName({ msg: message, address: chatData.address })
-                  }}
+                  }
                 />
               )}
             </div>
           </div>
         ) : (
-          "hey"
+          ""
         )}
       </div>
     </div>

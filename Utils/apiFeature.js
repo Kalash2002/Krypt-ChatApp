@@ -1,16 +1,16 @@
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
-import { ChatAppAddress, ChatAppABI } from "../Context/Constants";
 
-//targeting metamask
-export const CheckIfWalletConnected = async () => {
+import { ChatAppAddress, ChatAppABI } from "../Context/constants";
+
+export const ChechIfWalletConnected = async () => {
   try {
-    // check metamask is connected
-    if (!window.ethereum) return console.log("Install MetaMAsk");
+    if (!window.ethereum) return console.log("Install MateMask");
 
     const accounts = await window.ethereum.request({
       method: "eth_accounts",
     });
+
     const firstAccount = accounts[0];
     return firstAccount;
   } catch (error) {
@@ -20,16 +20,18 @@ export const CheckIfWalletConnected = async () => {
 
 export const connectWallet = async () => {
   try {
+    // if (!window.ethereum) return console.log("Install MateMask");
 
-    // check metamask is connected
-    if (!window.ethereum) return console.log("Install MetaMAsk");
+    // const accounts = await window.ethereum.request({
+    //   method: "eth_requestAccounts",
+    // });
+
+    if (!window.ethereum) return console.log("Install MetaMask");
 
     const accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
-
     const firstAccount = accounts[0];
-
     return firstAccount;
   } catch (error) {
     console.log(error);
@@ -39,7 +41,6 @@ export const connectWallet = async () => {
 const fetchContract = (signerOrProvider) =>
   new ethers.Contract(ChatAppAddress, ChatAppABI, signerOrProvider);
 
-//function to connect with smart contract
 export const connectingWithContract = async () => {
   try {
     const web3modal = new Web3Modal();
@@ -47,25 +48,22 @@ export const connectingWithContract = async () => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
     const contract = fetchContract(signer);
-
     return contract;
   } catch (error) {
     console.log(error);
   }
 };
 
-//function to get readable time of chat
-
-export const convertTime = (time) => {
+export const converTime = (time) => {
   const newTime = new Date(time.toNumber());
 
   const realTime =
     newTime.getHours() +
     "/" +
-    newTime.getMinutes +
+    newTime.getMinutes() +
     "/" +
     newTime.getSeconds() +
-    " Dates : " +
+    "  Date:" +
     newTime.getDate() +
     "/" +
     (newTime.getMonth() + 1) +

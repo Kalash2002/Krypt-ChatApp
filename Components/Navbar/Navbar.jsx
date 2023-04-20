@@ -2,49 +2,66 @@ import React, { useEffect, useState, useContext } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-//internal imports
-import Styles from "./Navbar.module.css";
-import { ChatAppContent } from "../../Context/ChatAppContext";
+//INTERNAL IMPORT
+import Style from "./NavBar.module.css";
+import { ChatAppContect } from "../../Context/ChatAppContext";
 import { Model, Error } from "../index";
-import image from "../../Assets";
+import images from "../../assets";
 
-const Navbar = () => {
+const NavBar = () => {
   const menuItems = [
-    { menu: "All Users", link: "/alluser" },
-    { menu: "Chat", link: "/" },
-    { menu: "Setting", link: "/" },
-    { menu: "Contact", link: "/" },
-    { menu: "FAQ's", link: "/" },
-    { menu: "Terms of use", link: "/" },
+    {
+      menu: "All Users",
+      link: "alluser",
+    },
+    {
+      menu: "CHAT",
+      link: "/",
+    },
+    {
+      menu: "CONTACT",
+      link: "/",
+    },
+    {
+      menu: "SETTING",
+      link: "/",
+    },
+    {
+      menu: "FAQS",
+      link: "/",
+    },
+    {
+      menu: "TERMS OF USE",
+      link: "/",
+    },
   ];
 
-  //Usestates
+  //USESTATE
   const [active, setActive] = useState(2);
   const [open, setOpen] = useState(false);
   const [openModel, setOpenModel] = useState(false);
 
-  const { account, userName, connectWallet, createAccount, error, testing } =
-    useContext(ChatAppContent);
-
+  const { account, userName, connectWallet, createAccount, error } =
+    useContext(ChatAppContect);
   return (
-    <div className={Styles.Navbar}>
-      <div className={Styles.Navbar_box}>
-        <div className={Styles.Navbar_box_left}>
-          <Image src={image.logo} alt="logo" width={150} height={30} />
+    <div className={Style.NavBar}>
+      <div className={Style.NavBar_box}>
+        <div className={Style.NavBar_box_left}>
+          <Image src={images.logo} alt="logo" width={50} height={50} />
         </div>
-        <div className={Styles.Navbar_box_right}>
-          {/* Desktop  */}
-          <div className={Styles.Navbar_box_right_menu}>
+        <div className={Style.NavBar_box_right}>
+          {/* //DESKTOP */}
+          <div className={Style.NavBar_box_right_menu}>
             {menuItems.map((el, i) => (
               <div
                 onClick={() => setActive(i + 1)}
                 key={i + 1}
-                className={`${Styles.Navbar_box_right_menu_items} ${
-                  active == i + 1 ? Styles.active_btn : ""
+                className={`${Style.NavBar_box_right_menu_items} ${
+                  active == i + 1 ? Style.active_btn : ""
                 }`}
               >
                 <Link
-                  className={Styles.Navbar_box_right_menu_items_link}
+                  className={Style.NavBar_box_right_menu_items_link}
                   href={el.link}
                 >
                   {el.menu}
@@ -53,28 +70,26 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* for mobile devices */}
+          {/* //MOBILE */}
           {open && (
-            <div className={Styles.mobile_menu}>
+            <div className={Style.mobile_menu}>
               {menuItems.map((el, i) => (
                 <div
                   onClick={() => setActive(i + 1)}
                   key={i + 1}
-                  className={`${Styles.mobile_menu_items} ${
-                    active == i + 1 ? Styles.active_btn : ""
+                  className={`${Style.mobile_menu_items} ${
+                    active == i + 1 ? Style.active_btn : ""
                   }`}
                 >
-                  <Link
-                    className={Styles.mobile_menu_items_link}
-                    href={el.link}
-                  >
+                  <Link className={Style.mobile_menu_items_link} href={el.link}>
                     {el.menu}
                   </Link>
                 </div>
               ))}
-              <p className={Styles.mobile_menu_btn}>
+
+              <p className={Style.mobile_menu_btn}>
                 <Image
-                  src={image.close}
+                  src={images.close}
                   alt="close"
                   width={50}
                   height={50}
@@ -84,66 +99,55 @@ const Navbar = () => {
             </div>
           )}
 
-          {/* Connect wallet component */}
-          <div className={Styles.Navbar_box_right_connect}>
+          {/* CONNECT WALLET */}
+          <div className={Style.NavBar_box_right_connect}>
             {account == "" ? (
-              <button
-                onClick={() => {
-                  let res = connectWallet();
-                  console.log("fdf", res);
-                }}
-              >
+              <button onClick={() => connectWallet()}>
                 {""}
-                <span> Connect Wallet</span>
+                <span>Connect Wallet</span>
               </button>
             ) : (
-              <button
-                onClick={() => {
-                  console.log("teri ma ki chut");
-                  const res2 = testing();
-                  console.log(res2);
-                }}
-              >
+              <button onClick={() => setOpenModel(true)}>
                 {""}
                 <Image
-                  src={userName ? image.username : image.create2}
+                  src={userName ? images.accountName : images.create2}
                   alt="Account image"
                   width={20}
                   height={20}
                 />
-                <small>{userName || "Create account"}</small>
+                {""}
+                <small>{userName || "Create Account"}</small>
               </button>
             )}
           </div>
 
           <div
-            className={Styles.Navbar_box_right_open}
+            className={Style.NavBar_box_right_open}
             onClick={() => setOpen(true)}
           >
-            <Image src={image.open} alt="open" width={30} height={30} />
+            <Image src={images.open} alt="open" width={30} height={30} />
           </div>
         </div>
       </div>
 
-      {/* Model Compoment */}
+      {/* MODEL COMPONENT */}
       {openModel && (
-        <div className={Styles.modelBox}>
+        <div className={Style.modelBox}>
           <Model
             openBox={setOpenModel}
-            title="Welcome To"
-            head="Chat Buddy"
-            info="Random long messagepara"
-            smallInfo="Kindley select your name"
-            image={image.hero}
+            title="WELCOME TO"
+            head="CHAT BUDDY"
+            info="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate maxime assumenda exercitationem voluptatibus, vero aliquid in tempore aut, impedit dolores voluptate recusandae nulla fuga? Praesentium iusto mollitia sint fugit! Placeat?"
+            smallInfo="Kindley seclet your name..."
+            image={images.hero}
             functionName={createAccount}
             address={account}
           />
         </div>
       )}
-
-      {error !== null ? <Error error={error} /> : null}
+      {error == "" ? "" : <Error error={error} />}
     </div>
   );
 };
 
-export default Navbar;
+export default NavBar;

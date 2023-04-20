@@ -1,7 +1,8 @@
+
 .Chat{
-    padding:2rem;
+    padding: 2rem;
     background-color: rgba(0,0,0,0.25);
-    border-radius: 0.5rem;
+    border-radius: .5rem;
     overflow-y: scroll;
 }
 
@@ -10,7 +11,7 @@
     grid-template-columns: 1fr;
     height: 50vh;
     width: 80%;
-    margin: 0 auto;
+    margin:  0 auto;
     overflow-y: scroll;
 }
 
@@ -18,23 +19,23 @@
 .Chat_box_left p{
     background-color: #f182035b;
     padding: 1rem;
-    border-top-right-radius: 0.5rem;
-    border-top-left-radius: 0.5rem;
-    border-bottom-left-radius: 0.5rem;
+    border-top-right-radius: .5rem;
+    border-top-left-radius: .5rem;
+    border-bottom-left-radius: .5rem;
     position: relative;
 }
 
 .Chat_box_left_title{
     display: flex;
     align-items: center;
-    gap:1rem;
-    font-size:1rem;
+    gap: 1rem;
+    font-size: 1rem;
 }
 
 .Chat_box_send_img{
     display: flex;
     align-items: center;
-    gap:1rem;
+    gap: 1rem;
 }
 
 .Chat_box_send_img input{
@@ -43,30 +44,35 @@
     outline: none;
     border: none;
     padding: 1rem;
-    color: #f18303 ;
+    color: #f18203;
+    border-radius: .5rem;
+}
+
+.Chat_user_info{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    line-height: 1;
 }
 
 .Chat_user_info_box h4,
 .Chat_user_info_box p{
-  line-height: 2;
+    line-height: 0;
 }
 
-@media only screen and (max-width:35em){
+@media only screen and (max-width: 35em) {
     .Chat{
         padding: 1rem;
     }
+
     .Chat p{
-        font-size: 0.8rem;
+        font-size: .8rem;
     }
     .Chat small{
-        font-size:0.8rem;
+        font-size: .8rem;
     }
+
     .show{
         display: none;
     }
 }
-
-
-
-
-

@@ -1,294 +1,147 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { ChatAppABI } from "./Constants";
-import Web3Modal from "web3modal";
-import { ethers } from "ethers";
-//Internal import
+
+//INTERNAL IMPORT
 import {
-  CheckIfWalletConnected,
+  ChechIfWalletConnected,
   connectWallet,
   connectingWithContract,
 } from "../Utils/apiFeature";
-export const ChatAppContent = React.createContext();
+
+export const ChatAppContect = React.createContext();
 
 export const ChatAppProvider = ({ children }) => {
-  //UseState
+  //USESTATE
   const [account, setAccount] = useState("");
   const [userName, setUserName] = useState("");
   const [friendLists, setFriendLists] = useState([]);
-  const [friendmsg, setFriendmsg] = useState([]);
+  const [friendMsg, setFriendMsg] = useState([]);
   const [loading, setLoading] = useState(false);
   const [userLists, setUserLists] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
-  //Chat user data
+  //CHAT USER DATA
   const [currentUserName, setCurrentUserName] = useState("");
   const [currentUserAddress, setCurrentUserAddress] = useState("");
 
   const router = useRouter();
 
-  //Fetch data time of page load
-
-  useEffect(() => {
-    fetchData();
-    console.log(userLists);
-  }, []);
-
+  //FETCH DATA TIME OF PAGE LOAD
   const fetchData = async () => {
     try {
-      console.log("in try");
-      //get contract
-      // const contract = await connectingWithContract();
-      //get account address
-      const connectAccountt = await connectWallet();
-      setAccount(connectAccountt);
-      setCurrentUserAddress(connectAccountt);
-      console.log("wallet connected", connectAccountt);
-      const web3modal = new Web3Modal();
-      const connection = await web3modal.connect();
-
-      const provider = new ethers.providers.Web3Provider(connection);
-      const signer = provider.getSigner();
-
-      console.log(signer);
-      console.log("dfdfdf", provider);
-
-      const contract = new ethers.Contract(
-        "0x0E71261245A3399F11fB49f8aa94D22d0c29B21D",
-        ChatAppABI,
-        signer
-      );
-      console.log("4");
-      console.log("completed connection");
-      const check = await contract.test();
-      console.log(check);
-
-      const userNamee = await contract.getUsername(connectAccountt);
-      setUserName(userNamee);
-      setCurrentUserName(userNamee);
-      console.log(userNamee);
-
-
-      //Get friend list
-
-      const friendListss = await contract.geyMyFreind();
-      setFriendLists(friendListss);
-      console.log("getting friend", friendListss);
-
-      // // //get all app users
-      const userListt = await contract.getAllAppUsers();
-      setUserLists(userListt);
-      console.log("userlist", userListt);
-
-
-
-      //use effect when someone reload the page
+      //GET CONTRACT
+      const contract = await connectingWithContract();
+      //GET ACCOUNT
+      const connectAccount = await connectWallet();
+      setAccount(connectAccount);
+      //GET USER NAME
+      const userName = await contract.getUsername(connectAccount);
+      setUserName(userName);
+      //GET MY FRIEND LIST
+      const friendLists = await contract.getMyFriendList();
+      setFriendLists(friendLists);
+      //GET ALL APP USER LIST
+      const userList = await contract.getAllAppUser();
+      setUserLists(userList);
     } catch (error) {
-      // console.log(error);
-      // setError(error);
+      // setError("Please Install And Connect Your Wallet");
+      console.log(error);
     }
   };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  //function to read message
-  const readMessage = async (friendaddress) => {
+  //READ MESSAGE
+  const readMessage = async (friendAddress) => {
     try {
-       console.log("in reading message")
-      const web3modal = new Web3Modal();
-      const connection = await web3modal.connect();
-
-      const provider = new ethers.providers.Web3Provider(connection);
-      const signer = provider.getSigner();
-
-      const contract = new ethers.Contract(
-        "0x0E71261245A3399F11fB49f8aa94D22d0c29B21D",
-        ChatAppABI,
-        signer
-      );
-
-      console.log("completed connection");
-      const check = await contract.test();
-      console.log(check);
-
-      const read = await contract.readMessage(friendaddress);
-      setFriendmsg(read);
-      console.log("succesfuuly getting messages");
+      const contract = await connectingWithContract();
+      const read = await contract.readMessage(friendAddress);
+      setFriendMsg(read);
     } catch (error) {
-      // setError("Currently no messages");
+      console.log("Currently You Have no Message");
     }
   };
 
-  //create account
+  //CREATE ACCOUNT
   const createAccount = async ({ name, accountAddress }) => {
-    console.log("in Create account fn");
     try {
-      // if (name || account) return setError("Name and account, cant be empty");
-      console.log("in create account");
-      const web3modal = new Web3Modal();
-      const connection = await web3modal.connect();
+      // if (name || accountAddress)
+      //   return setError("Name And AccountAddress, cannot be emty");
 
-      const provider = new ethers.providers.Web3Provider(connection);
-      const signer = provider.getSigner();
-
-      const contract = new ethers.Contract(
-        "0x0E71261245A3399F11fB49f8aa94D22d0c29B21D",
-        ChatAppABI,
-        signer
-      );
-
-      console.log("completed connection");
-      const check = await contract.test();
-      console.log(check);
-
-      const getCreatedUser = await contract.createAccount(name.toString());
-      console.log("user created");
+      const contract = await connectingWithContract();
+      const getCreatedUser = await contract.createAccount(name);
       setLoading(true);
       await getCreatedUser.wait();
       setLoading(false);
       window.location.reload();
     } catch (error) {
-      // setError("Error while creating your account please reload");
+      setError("Error while creating your account Pleas reload browser");
     }
   };
 
-  //Add your friend
-  const addFriends = async (name, accountAddress) => {
+  //ADD YOUR FRIENDS
+  const addFriends = async ({ name, accountAddress }) => {
     try {
-      // if (name || accountAddress)
-      //   return setError("Please provide name and address of friend");
-      console.log("In addfriend");
-      console.log(name, accountAddress);
-      const web3modal = new Web3Modal();
-      const connection = await web3modal.connect();
+      // if (name || accountAddress) return setError("Please provide data");
 
-      const provider = new ethers.providers.Web3Provider(connection);
-      const signer = provider.getSigner();
-      console.log(signer);
-      const contract = new ethers.Contract(
-        "0x0E71261245A3399F11fB49f8aa94D22d0c29B21D",
-        ChatAppABI,
-        signer
-      );
-
-      console.log("completed connection");
-      console.log(contract);
-      const check = await contract.test();
-      console.log(check);
-      const addmyFriend = await contract.addFriend(accountAddress, name);
+      const contract = await connectingWithContract();
+      const addMyFriend = await contract.addFriend(accountAddress, name);
       setLoading(true);
-      console.log("Freind added");
-      await addmyFriend.wait();
+      await addMyFriend.wait();
       setLoading(false);
-      //after adding friend land on home page
       router.push("/");
       window.location.reload();
     } catch (error) {
-      setError("Error while adding your friend");
+      setError("Something went wrong while adding friends, try again");
     }
   };
 
-  //send Message to your friend
+  //SEND MESSAGE TO YOUR FRIEND
   const sendMessage = async ({ msg, address }) => {
     try {
-      // if (msg || address) return setError("Please type your message");
-      console.log("In send message function")
-      const web3modal = new Web3Modal();
-      const connection = await web3modal.connect();
+      // if (msg || address) return setError("Please Type your Message");
 
-      const provider = new ethers.providers.Web3Provider(connection);
-      const signer = provider.getSigner();
-      console.log(signer);
-      const contract = new ethers.Contract(
-        "0x0E71261245A3399F11fB49f8aa94D22d0c29B21D",
-        ChatAppABI,
-        signer
-      );
-
-      console.log("completed connection");
-      console.log(contract);
-      const check = await contract.test();
-      console.log(check);
-      console.log("This is sendMessage",address,msg);
-      const addMessage = await contract.sendMessage(address, msg.toString());
+      const contract = await connectingWithContract();
+      const addMessage = await contract.sendMessage(address, msg);
       setLoading(true);
       await addMessage.wait();
       setLoading(false);
       window.location.reload();
-      console.log("message sent");
-
     } catch (error) {
-      // setError("Please reload and try agian");
+      setError("Please reload and try again");
     }
   };
 
-  //Read user info
-  const userInfo = async (userAddress) => {
-    console.log("in chatAppContext userinfo")
-    const web3modal = new Web3Modal();
-      const connection = await web3modal.connect();
-
-      const provider = new ethers.providers.Web3Provider(connection);
-      const signer = provider.getSigner();
-
-      const contract = new ethers.Contract(
-        "0x0E71261245A3399F11fB49f8aa94D22d0c29B21D",
-        ChatAppABI,
-        provider
-      );
-
-      console.log("completed connection");
-      const check = await contract.test();
-      console.log(check);
+  //READ INFO
+  const readUser = async (userAddress) => {
+    const contract = await connectingWithContract();
     const userName = await contract.getUsername(userAddress);
-
     setCurrentUserName(userName);
     setCurrentUserAddress(userAddress);
   };
-
-  const testing = async (useraaddress) => {
-    console.log("In addfriend");
-    const web3modal = new Web3Modal();
-    const connection = await web3modal.connect();
-
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    console.log(signer);
-    const contract = new ethers.Contract(
-      "0x0E71261245A3399F11fB49f8aa94D22d0c29B21D",
-      ChatAppABI,
-      signer
-    );
-
-    console.log("completed connection");
-    console.log(contract);
-    const check = await contract.test();
-    console.log("fsdfdfde", check);
-    const chect = await contract.geyMyFreind();
-    console.log("ffee", chect);
-  };
-
   return (
-    <ChatAppContent.Provider
+    <ChatAppContect.Provider
       value={{
         readMessage,
         createAccount,
         addFriends,
         sendMessage,
-        userInfo,
+        readUser,
         connectWallet,
-        CheckIfWalletConnected,
-        testing,
+        ChechIfWalletConnected,
         account,
         userName,
         friendLists,
-        friendmsg,
-        loading,
+        friendMsg,
         userLists,
+        loading,
         error,
         currentUserName,
         currentUserAddress,
       }}
     >
       {children}
-    </ChatAppContent.Provider>
+    </ChatAppContect.Provider>
   );
 };

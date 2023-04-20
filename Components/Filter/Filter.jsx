@@ -1,52 +1,52 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import Image from "next/image";
 
-//Internal imports
-import Styles from "./Filter.module.css";
+//INTERNAL IMPORT
 import Style from "./Filter.module.css";
-import images from "../../Assets";
-import { ChatAppContent } from "../../Context/ChatAppContext";
+import images from "../../assets";
+import { ChatAppContect } from "../../Context/ChatAppContext";
 import { Model } from "../index";
-const Filter = () => {
-  const { account, addFriends } = useContext(ChatAppContent);
-  const [addFriend, setAddFriend] = useState(false);
 
+const Filter = () => {
+  const { account, addFriends } = useContext(ChatAppContect);
+
+  //USESTATE
+  const [addFriend, setAddFriend] = useState(false);
   return (
-    <div className={Styles.Filter}>
-      <div className={Styles.Filter_box}>
-        <div className={Styles.Filter_box_left}>
-          <div className={Styles.Filter_box_left_search}>
+    <div className={Style.Filter}>
+      <div className={Style.Filter_box}>
+        <div className={Style.Filter_box_left}>
+          <div className={Style.Filter_box_left_search}>
             <Image src={images.search} alt="image" width={20} height={20} />
-            <input type="text" placeholder="Seach..." />
+            <input type="text" placeholder="search.." />
           </div>
         </div>
-        <div className={Styles.Filter_box_right}>
+        <div className={Style.Filter_box_right}>
           <button>
             <Image src={images.clear} alt="clear" width={20} height={20} />
-            Clear Chat
+            CLEAR CHAT
           </button>
-
           <button onClick={() => setAddFriend(true)}>
-            <Image src={images.add} alt="clear" width={20} height={20} />
-            Add Friend
+            <Image src={images.user} alt="clear" width={20} height={20} />
+            ADD FRIEND
           </button>
         </div>
       </div>
-      {/* Model Component */}
+
+      {/* //MODEL COMPONENT */}
       {addFriend && (
-        <div className={Styles.Filter_model}>
+        <div className={Style.Filter_model}>
           <Model
             openBox={setAddFriend}
-            title="Welcome TO"
+            title="WELCOME TO"
             head="CHAT BUDDY"
-            info="Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore atque quia inventore placeat molestias iste beatae voluptas expedita nemo labore nam non architecto libero obcaecati nobis quidem, vero odio cupiditate."
-            smallInfo="Kindely Select Your Friend Name and Address.."
+            info="Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum sit doloribus quod vel expedita, dicta voluptatibus, nemo, deserunt minima quis recusandae porro officiis modi fugiat libero tempora corporis necessitatibus itaque!"
+            smallInfo="Kindley Select Your Friend Name & Address.."
             image={images.hero}
-            functionName={addFriend}
+            functionName={addFriends}
           />
         </div>
       )}
-      <p></p>
     </div>
   );
 };
